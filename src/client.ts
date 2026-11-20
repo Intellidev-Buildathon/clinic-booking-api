@@ -41,6 +41,11 @@ export class ClinicBookingClient {
     return this.request("POST", "/bookings", input);
   }
 
+  /** Cancels an appointment booking and frees its slot. */
+  cancelBooking(bookingId: string): Promise<Booking> {
+    return this.request("POST", `/bookings/${encodeURIComponent(bookingId)}/cancel`);
+  }
+
   private async request<T>(method: "GET" | "POST", path: string, body?: unknown): Promise<T> {
     const res = await this.fetchImpl(`${this.baseUrl}${path}`, {
       method,

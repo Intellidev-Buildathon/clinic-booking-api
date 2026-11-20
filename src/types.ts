@@ -77,6 +77,7 @@ export type ApiErrorCode =
   | "outside_opening_hours"
   | "slot_taken"
   | "not_found"
+  | "booking_not_found"
   | "internal_error";
 
 export interface ApiErrorBody {
