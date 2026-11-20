@@ -9,12 +9,16 @@ describe("ClinicBookingClient", () => {
     const fetchMock = vi
       .fn<typeof fetch>()
       .mockResolvedValueOnce(json(200, { status: "ok" }))
-      .mockResolvedValueOnce(json(200, { clinicId: "carefirst-indiranagar", date: "2026-11-23", timeZone: "Asia/Kolkata", slots: [] }))
+      .mockResolvedValueOnce(
+        json(200, { clinicId: "carefirst-indiranagar", date: "2026-11-23", timeZone: "Asia/Kolkata", openingHours: [], slots: [] }),
+      )
       .mockResolvedValueOnce(json(409, { error: "slot_taken", message: "that slot is already booked" }));
     const client = new ClinicBookingClient({ baseUrl: "http://localhost:3000/", fetch: fetchMock });
 
     expect(await client.health()).toEqual({ status: "ok" });
-    expect((await client.listSlots("carefirst-indiranagar", "2026-11-23")).slots).toEqual([]);
+    const slotsRes = await client.listSlots("carefirst-indiranagar", "2026-11-23");
+    expect(slotsRes.slots).toEqual([]);
+    expect(slotsRes.openingHours).toEqual([]);
     expect(fetchMock.mock.calls[1]?.[0]).toBe("http://localhost:3000/clinics/carefirst-indiranagar/slots?date=2026-11-23");
 
     const err = await client

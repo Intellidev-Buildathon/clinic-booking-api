@@ -36,6 +36,7 @@ export interface SlotsResponse {
   /** Calendar date in clinic time, YYYY-MM-DD. */
   date: string;
   timeZone: "Asia/Kolkata";
+  openingHours: OpeningWindow[];
   slots: SlotAvailability[];
 }
 
